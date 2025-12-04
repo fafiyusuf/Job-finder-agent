@@ -142,23 +142,18 @@ function ResumeForm({ data }) {
   };
 
   return (
-    <div className="form-section">
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center",
-        marginBottom: "2rem"
-      }}>
-        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
-          <ClipboardList className="w-5 h-5" />
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h3 className="flex items-center gap-2 text-xl font-bold text-gray-800">
+          <ClipboardList className="w-6 h-6 text-primary-500" />
           Extracted Resume Data
         </h3>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button 
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
               editMode 
                 ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
-                : 'bg-primary-500 text-white hover:bg-primary-600'
+                : 'bg-primary-500 text-white hover:bg-primary-600 shadow-md'
             }`}
             onClick={() => setEditMode(!editMode)}
           >
@@ -175,14 +170,14 @@ function ResumeForm({ data }) {
             )}
           </button>
           <button 
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all transform hover:scale-105"
             onClick={resetForm}
           >
             <Trash2 className="w-4 h-4" />
             Reset
           </button>
           <button 
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md"
             onClick={downloadJSON}
           >
             <Download className="w-4 h-4" />
@@ -191,29 +186,29 @@ function ResumeForm({ data }) {
         </div>
       </div>
 
-      <div className="form-grid">
+      <div className="space-y-8">
         {/* Personal Information Section */}
-        <div className="form-section">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <User className="w-5 h-5" />
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <User className="w-5 h-5 text-blue-600" />
             Personal Information
           </h3>
           
-          <div className="form-row">
-            <div className="form-group">
-              <label>Full Name</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Full Name</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 disabled={!editMode} 
                 value={form.name} 
                 onChange={(e) => updateField("name", e.target.value)}
                 placeholder="John Doe"
               />
             </div>
-            <div className="form-group">
-              <label>Email Address</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Email Address</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 type="email"
                 disabled={!editMode} 
                 value={form.email} 
@@ -223,21 +218,21 @@ function ResumeForm({ data }) {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Phone Number</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Phone Number</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 disabled={!editMode} 
                 value={form.phone} 
                 onChange={(e) => updateField("phone", e.target.value)}
                 placeholder="+1 (555) 123-4567"
               />
             </div>
-            <div className="form-group">
-              <label>Location</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Location</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 disabled={!editMode} 
                 value={form.location} 
                 onChange={(e) => updateField("location", e.target.value)}
@@ -246,21 +241,21 @@ function ResumeForm({ data }) {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>LinkedIn Profile</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">LinkedIn Profile</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 disabled={!editMode} 
                 value={form.linkedin} 
                 onChange={(e) => updateField("linkedin", e.target.value)}
                 placeholder="linkedin.com/in/johndoe"
               />
             </div>
-            <div className="form-group">
-              <label>Portfolio/Website</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">Portfolio/Website</label>
               <input 
-                className="form-control"
+                className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500"
                 disabled={!editMode} 
                 value={form.website} 
                 onChange={(e) => updateField("website", e.target.value)}
@@ -271,42 +266,43 @@ function ResumeForm({ data }) {
         </div>
 
         {/* Professional Summary */}
-        <div className="form-section">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <FileText className="w-5 h-5" />
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <FileText className="w-5 h-5 text-green-600" />
             Professional Summary
           </h3>
-          <div className="form-group">
+          <div className="flex flex-col gap-2">
             <textarea 
-              className="form-control"
+              className="px-4 py-3 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50 disabled:text-gray-500 resize-y"
               disabled={!editMode} 
               value={form.summary} 
               onChange={(e) => updateField("summary", e.target.value)}
               placeholder="Brief professional summary highlighting key achievements and career goals..."
               rows={4}
-              style={{ resize: 'vertical' }}
             />
           </div>
         </div>
 
         {/* Skills Section */}
-        <div className="form-section">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <Rocket className="w-5 h-5" />
+        <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-100">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <Rocket className="w-5 h-5 text-purple-600" />
             Skills & Technologies
           </h3>
           
           {editMode && (
-            <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+            <div className="flex gap-2 mb-4">
               <input 
-                className="form-control"
+                className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                 value={newSkill} 
                 onChange={(e) => setNewSkill(e.target.value)}
                 placeholder="Add a skill..."
                 onKeyPress={(e) => e.key === 'Enter' && addSkill()}
-                style={{ flex: 1 }}
               />
-              <button className="btn btn-primary" onClick={addSkill}>
+              <button 
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-primary-500 text-white hover:bg-primary-600 transition-all shadow-md hover:shadow-lg transform hover:scale-105"
+                onClick={addSkill}
+              >
                 <Plus className="w-4 h-4" />
                 Add
               </button>
@@ -314,21 +310,22 @@ function ResumeForm({ data }) {
           )}
           
           {form.skills.length === 0 ? (
-            <p style={{ color: "#718096", fontStyle: 'italic' }}>No skills detected. Add some skills above.</p>
+            <p className="text-gray-500 italic">No skills detected. Add some skills above.</p>
           ) : (
-            <div className="skills-container">
+            <div className="flex flex-wrap gap-2">
               {form.skills.map((skill, i) => (
-                <div key={i} className={`skill-tag ${editMode ? 'editable' : ''}`}>
+                <div 
+                  key={i} 
+                  className="bg-gradient-to-r from-primary-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+                >
                   {skill}
                   {editMode && (
-                      <X 
-                        className="w-3 h-3"
-                        onClick={() => removeSkill(i)}
-                        style={{
-                          cursor: 'pointer',
-                          marginLeft: '0.5rem'
-                        }}
-                      />
+                    <button
+                      onClick={() => removeSkill(i)}
+                      className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
                   )}
                 </div>
               ))}
@@ -337,45 +334,48 @@ function ResumeForm({ data }) {
         </div>
 
         {/* Experience Section */}
-        <div className="form-section">
-          <h3 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-              <Briefcase className="w-5 h-5" />
+        <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+              <Briefcase className="w-5 h-5 text-orange-600" />
               Work Experience
-            </span>
+            </h3>
             {editMode && (
-              <button className="btn btn-primary flex items-center gap-2" onClick={addExperience} style={{ fontSize: '0.9rem' }}>
+              <button 
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-primary-500 text-white hover:bg-primary-600 transition-all shadow-md hover:shadow-lg transform hover:scale-105 text-sm"
+                onClick={addExperience}
+              >
                 <Plus className="w-4 h-4" />
                 Add Experience
               </button>
             )}
-          </h3>
+          </div>
           
           {form.experience.length === 0 ? (
-            <p style={{ color: "#718096", fontStyle: 'italic' }}>No work experience found.</p>
+            <p className="text-gray-500 italic">No work experience found.</p>
           ) : (
-            <div>
+            <div className="space-y-4">
               {form.experience.map((exp, i) => (
-                <div key={i} className="experience-item">
-                  <div className="experience-header">
-                    <div style={{ flex: 1 }}>
+                <div key={i} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex justify-between gap-4">
+                    <div className="flex-1">
                       {editMode ? (
-                        <div style={{ display: 'grid', gap: '0.5rem' }}>
+                        <div className="space-y-3">
                           <input 
-                            className="form-control"
+                            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                             value={typeof exp === 'string' ? exp : exp.title || ''}
                             onChange={(e) => updateExperience(i, 'title', e.target.value)}
                             placeholder="Job Title"
                           />
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <input 
-                              className="form-control"
+                              className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                               value={typeof exp === 'string' ? '' : exp.company || ''}
                               onChange={(e) => updateExperience(i, 'company', e.target.value)}
                               placeholder="Company Name"
                             />
                             <input 
-                              className="form-control"
+                              className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                               value={typeof exp === 'string' ? '' : exp.duration || ''}
                               onChange={(e) => updateExperience(i, 'duration', e.target.value)}
                               placeholder="Duration (e.g., Jan 2020 - Present)"
@@ -384,13 +384,13 @@ function ResumeForm({ data }) {
                         </div>
                       ) : (
                         <div>
-                          <h4 className="experience-title">
+                          <h4 className="text-base font-semibold text-gray-800 mb-1">
                             {typeof exp === 'string' ? exp : exp.title || 'Position Title'}
                           </h4>
                           {typeof exp !== 'string' && (
                             <>
-                              <p className="experience-company">{exp.company || 'Company Name'}</p>
-                              <p className="experience-duration">{exp.duration || exp.dates || 'Duration'}</p>
+                              <p className="text-gray-600 mb-1">{exp.company || 'Company Name'}</p>
+                              <p className="text-gray-500 text-sm">{exp.duration || exp.dates || 'Duration'}</p>
                             </>
                           )}
                         </div>
@@ -399,14 +399,7 @@ function ResumeForm({ data }) {
                     {editMode && (
                       <button 
                         onClick={() => removeExperience(i)}
-                        style={{
-                          background: '#fed7d7',
-                          color: '#e53e3e',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '0.25rem 0.5rem',
-                          cursor: 'pointer'
-                        }}
+                        className="px-3 py-1.5 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium h-fit"
                       >
                         Remove
                       </button>
@@ -419,45 +412,48 @@ function ResumeForm({ data }) {
         </div>
 
         {/* Education Section */}
-        <div className="form-section">
-          <h3 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-              <GraduationCap className="w-5 h-5" />
+        <div className="bg-gradient-to-br from-cyan-50 to-sky-50 p-6 rounded-xl border border-cyan-100">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+              <GraduationCap className="w-5 h-5 text-cyan-600" />
               Education
-            </span>
+            </h3>
             {editMode && (
-              <button className="btn btn-primary flex items-center gap-2" onClick={addEducation} style={{ fontSize: '0.9rem' }}>
+              <button 
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-primary-500 text-white hover:bg-primary-600 transition-all shadow-md hover:shadow-lg transform hover:scale-105 text-sm"
+                onClick={addEducation}
+              >
                 <Plus className="w-4 h-4" />
                 Add Education
               </button>
             )}
-          </h3>
+          </div>
           
           {form.education.length === 0 ? (
-            <p style={{ color: "#718096", fontStyle: 'italic' }}>No education information found.</p>
+            <p className="text-gray-500 italic">No education information found.</p>
           ) : (
-            <div>
+            <div className="space-y-4">
               {form.education.map((edu, i) => (
-                <div key={i} className="education-item">
-                  <div className="education-header">
-                    <div style={{ flex: 1 }}>
+                <div key={i} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex justify-between gap-4">
+                    <div className="flex-1">
                       {editMode ? (
-                        <div style={{ display: 'grid', gap: '0.5rem' }}>
+                        <div className="space-y-3">
                           <input 
-                            className="form-control"
+                            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                             value={typeof edu === 'string' ? edu : edu.degree || ''}
                             onChange={(e) => updateEducation(i, 'degree', e.target.value)}
                             placeholder="Degree"
                           />
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <input 
-                              className="form-control"
+                              className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                               value={typeof edu === 'string' ? '' : edu.institution || ''}
                               onChange={(e) => updateEducation(i, 'institution', e.target.value)}
                               placeholder="Institution"
                             />
                             <input 
-                              className="form-control"
+                              className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-base transition-all focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                               value={typeof edu === 'string' ? '' : edu.year || edu.dates || ''}
                               onChange={(e) => updateEducation(i, 'year', e.target.value)}
                               placeholder="Graduation Year"
@@ -466,13 +462,13 @@ function ResumeForm({ data }) {
                         </div>
                       ) : (
                         <div>
-                          <h4 className="education-title">
+                          <h4 className="text-base font-semibold text-gray-800 mb-1">
                             {typeof edu === 'string' ? edu : edu.degree || 'Degree'}
                           </h4>
                           {typeof edu !== 'string' && (
                             <>
-                              <p className="education-institution">{edu.institution || 'Institution'}</p>
-                              <p className="education-duration">{edu.year || edu.dates || 'Year'}</p>
+                              <p className="text-gray-600 mb-1">{edu.institution || 'Institution'}</p>
+                              <p className="text-gray-500 text-sm">{edu.year || edu.dates || 'Year'}</p>
                             </>
                           )}
                         </div>
@@ -481,14 +477,7 @@ function ResumeForm({ data }) {
                     {editMode && (
                       <button 
                         onClick={() => removeEducation(i)}
-                        style={{
-                          background: '#fed7d7',
-                          color: '#e53e3e',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '0.25rem 0.5rem',
-                          cursor: 'pointer'
-                        }}
+                        className="px-3 py-1.5 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium h-fit"
                       >
                         Remove
                       </button>

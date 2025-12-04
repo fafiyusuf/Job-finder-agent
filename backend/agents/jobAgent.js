@@ -137,7 +137,7 @@ async function jobAgent(message, skills = [], preferences = {}) {
       }
       
       console.log('Built search query:', searchQuery);
-      const results = await searchJobs(searchQuery, skills, preferences, 5);
+      const results = await searchJobs(searchQuery, skills, preferences, 10);
 
       if (results.length === 0) {
         return "I couldn't find any job openings matching your criteria. Try adjusting your search preferences or check back later.";
@@ -154,7 +154,7 @@ async function jobAgent(message, skills = [], preferences = {}) {
           response += `Matched Skills: ${job.matchedSkills.join(", ")}\n`;
         }
         response += `Description: ${job.snippet.substring(0, 150)}...\n`;
-        response += `Apply: ${job.url}\n\n`;
+        response += `🔗 [Apply Here](${job.url})\n\n`;
       });
 
       response += "Would you like me to search for more specific roles or adjust the criteria?";
