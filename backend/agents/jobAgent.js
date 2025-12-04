@@ -69,10 +69,23 @@ async function searchJobs(query, skills = [], preferences = {}, num = 5) {
     });
 
     const results = (res.data?.results || []).slice(0, num).map((r) => {
-      // Calculate skill match score
+      // Calculate skill match score - check against ALL skills
       const content = `${r.title || ""} ${r.content || ""} ${r.snippet || ""}`.toLowerCase();
-      const skillMatches = skills.filter(skill => content.includes(skill.toLowerCase()));
+      
+      // Match skills - partial matching for flexibility
+      const skillMatches = skills.filter(skill => {
+        const skillLower = skill.toLowerCase();
+        // Check for exact match or partial match (for compound skills like "React.js")
+        return content.includes(skillLower) || 
+               skillLower.split(/[\s\.\-\/]/).some(part => part.length > 2 && content.includes(part));
+      });
+      
       const matchScore = skillMatches.length;
+      
+      // Calculate relevance score (0-100)
+      const relevanceScore = Math.min(100, (matchScore / Math.max(skills.length, 1)) * 100 + 
+                                      (content.includes('developer') ? 10 : 0) +
+                                      (content.includes('engineer') ? 10 : 0));
 
       return {
         title: r.title || "Job Opening",
@@ -81,12 +94,16 @@ async function searchJobs(query, skills = [], preferences = {}, num = 5) {
         source: new URL(r.url || "https://example.com").hostname,
         matchedSkills: skillMatches,
         matchScore: matchScore,
+        relevanceScore: Math.round(relevanceScore),
         published: r.published_date || ""
       };
     });
 
-    // Sort by skill match score descending
-    return results.sort((a, b) => b.matchScore - a.matchScore);
+    // Sort by match score first, then by relevance score
+    return results.sort((a, b) => {
+      if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+      return b.relevanceScore - a.relevanceScore;
+    });
   } catch (err) {
     console.error("searchJobs error:", err.response?.data || err.message);
     return [];
@@ -114,50 +131,75 @@ async function jobAgent(message, skills = [], preferences = {}) {
 
     // If it's clearly a job search request, go straight to search
     if (isJobSearchRequest && skills && skills.length > 0) {
-      console.log("Detected job search request, proceeding directly to search...");
+      console.log("Detected job search request with skills:", skills);
       
-      // Perform job search with simplified query
-      let searchQuery;
-      if (preferences.title) {
-        searchQuery = preferences.title;
-      } else {
-        // Build simple query based on top skills
-        const topSkills = skills.slice(0, 3); // Limit to top 3 skills
-        if (topSkills.includes('React') || topSkills.includes('React.js')) {
-          searchQuery = 'React developer jobs';
-        } else if (topSkills.includes('Python')) {
-          searchQuery = 'Python developer jobs';
-        } else if (topSkills.includes('Java')) {
-          searchQuery = 'Java developer jobs';
-        } else if (topSkills.some(s => s.toLowerCase().includes('full stack'))) {
-          searchQuery = 'full stack developer jobs';
-        } else {
-          searchQuery = 'software developer jobs';
+      // Use Gemini to intelligently create search query based on ALL skills
+      const skillAnalysisPrompt = `Given these skills from a resume: ${skillsText}
+
+Analyze the skills and create a concise job search query (max 50 characters) that best represents this candidate's expertise.
+Focus on the most prominent/senior skills first.
+
+Return ONLY the search query text, nothing else. Examples:
+- "Senior Full Stack Developer"
+- "Python Machine Learning Engineer"
+- "React Frontend Developer"
+- "DevOps Engineer"
+
+Skills: ${skillsText}
+Job search query:`;
+
+      let searchQuery = preferences.title;
+      
+      if (!searchQuery) {
+        try {
+          console.log("Using Gemini to analyze skills and create search query...");
+          const queryResult = await model.generateContent(skillAnalysisPrompt);
+          const queryText = queryResult.response.text().trim();
+          searchQuery = queryText.replace(/['"]/g, '').substring(0, 100); // Clean and limit
+          console.log("Gemini generated search query:", searchQuery);
+        } catch (err) {
+          console.error("Error generating query with Gemini:", err.message);
+          // Fallback: use top 3 skills
+          const topSkills = skills.slice(0, 3).join(" ");
+          searchQuery = `${topSkills} developer jobs`;
         }
       }
       
-      console.log('Built search query:', searchQuery);
+      console.log('Final search query:', searchQuery);
       const results = await searchJobs(searchQuery, skills, preferences, 10);
 
       if (results.length === 0) {
         return "I couldn't find any job openings matching your criteria. Try adjusting your search preferences or check back later.";
       }
 
-      // Format results for display
-      let response = `I found ${results.length} job opportunities that match your skills:\n\n`;
+      // Format results for display with better information
+      let response = `🎯 I found **${results.length} job opportunities** matching your profile!\n\n`;
+      response += `📊 Analyzing against **${skills.length} skills** from your resume\n\n`;
+      response += `---\n\n`;
       
       results.forEach((job, idx) => {
-        response += `**${idx + 1}. ${job.title}**\n`;
-        response += `Company/Source: ${job.source}\n`;
-        response += `Match Score: ${job.matchScore}/${skills.length} skills matched\n`;
+        response += `### ${idx + 1}. ${job.title}\n`;
+        response += `**Company:** ${job.source}\n`;
+        response += `**Match Score:** ${job.matchScore}/${skills.length} skills (${job.relevanceScore}% relevant)\n`;
+        
         if (job.matchedSkills.length > 0) {
-          response += `Matched Skills: ${job.matchedSkills.join(", ")}\n`;
+          response += `**✓ Matched Skills:** ${job.matchedSkills.slice(0, 5).join(", ")}`;
+          if (job.matchedSkills.length > 5) {
+            response += ` +${job.matchedSkills.length - 5} more`;
+          }
+          response += `\n`;
         }
-        response += `Description: ${job.snippet.substring(0, 150)}...\n`;
+        
+        response += `**Description:** ${job.snippet.substring(0, 200)}${job.snippet.length > 200 ? '...' : ''}\n`;
         response += `🔗 [Apply Here](${job.url})\n\n`;
       });
 
-      response += "Would you like me to search for more specific roles or adjust the criteria?";
+      response += "---\n\n";
+      response += "💡 **Tips:**\n";
+      response += "- Jobs are ranked by skill match score\n";
+      response += "- You can refine your search by setting location or job title preferences\n";
+      response += "- Ask me to search for specific roles like 'Senior Frontend Developer'\n";
+      
       return response;
     }
 
