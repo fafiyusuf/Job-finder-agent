@@ -7,8 +7,6 @@ import {
   Circle,
   Globe,
   Loader,
-  Maximize2,
-  Minimize2,
   Send,
   Settings,
   Sparkles,
@@ -155,13 +153,13 @@ function JobChat({ skills }) {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button 
+            {/* <button 
               onClick={() => setIsFullscreen(!isFullscreen)}
               className="p-2 hover:bg-white/10 rounded-lg transition-all text-white hover:scale-110"
               title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-            </button>
+            </button> */}
             <button 
               onClick={() => setIsChatOpen(false)} 
               className="p-2 hover:bg-white/10 rounded-lg transition-all text-white hover:scale-110"

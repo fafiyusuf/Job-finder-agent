@@ -166,7 +166,9 @@ Job search query:`;
       }
       
       console.log('Final search query:', searchQuery);
-      const results = await searchJobs(searchQuery, skills, preferences, 10);
+      const results = await searchJobs(searchQuery, skills, preferences, 6
+        
+      );
 
       if (results.length === 0) {
         return "I couldn't find any job openings matching your criteria. Try adjusting your search preferences or check back later.";
